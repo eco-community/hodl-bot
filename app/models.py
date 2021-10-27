@@ -2,6 +2,7 @@ from tortoise import fields
 from tortoise.models import Model
 
 from app.validators import PositiveValueValidator
+from app.constants import DEFAULT_EPOCH_APY, DEFAULT_PORTFOLIO_PERCENTAGE
 
 
 class User(Model):
@@ -33,14 +34,14 @@ class Epoch(Model):
     apy = fields.data.DecimalField(
         max_digits=15,
         decimal_places=4,
-        default=0.025,
+        default=DEFAULT_EPOCH_APY,
         validators=[PositiveValueValidator()],
     )
     # part of the User.balance which will be staked (aka 0.2 means 20% of user's points wil be stakes)
     portfolio_percentage = fields.data.DecimalField(
         max_digits=15,
         decimal_places=4,
-        default=0.2,
+        default=DEFAULT_PORTFOLIO_PERCENTAGE,
         validators=[PositiveValueValidator()],
     )
     users = fields.ManyToManyField("app.User", related_name="epochs", through="user_epoch")
