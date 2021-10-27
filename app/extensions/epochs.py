@@ -59,6 +59,11 @@ class EpochCog(commands.Cog):
                 start_datetime=generate_start_datetime_for_latest_epoch(latest_epoch),
                 end_datetime=generate_end_datetime_for_latest_epoch(latest_epoch),
             )
+            # create user epochs for all users that are staking (if user is stacking epoch_lowest_balance = balance else epoch_lowest_balance = 0)
+            # also check that it doesn't conflict with get_or_create somewhere in the code
+            # async with in_transaction():
+            #     # TODO
+            #     pass
             return None
 
 

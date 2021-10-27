@@ -60,7 +60,7 @@ class UserEpoch(Model):
     id = fields.UUIDField(pk=True)
     user = fields.ForeignKeyField("app.User", related_name="user_epochs")
     epoch = fields.ForeignKeyField("app.Epoch", related_name="user_epochs")
-    # this balance will be used to determine APY per epoch (epoch_lowest_balance * apy)
+    # this balance will be used to determine APY per epoch (epoch_lowest_balance * apy * portfolio_percentage)
     epoch_lowest_balance = fields.data.DecimalField(
         max_digits=15,
         decimal_places=4,

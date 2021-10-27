@@ -88,3 +88,18 @@ async def update_balance_and_epoch_lowest_balance(user_id: int, points: Decimal,
     if not is_created and user.balance < user_epoch.epoch_lowest_balance:
         user_epoch.epoch_lowest_balance = user.balance
         await user_epoch.save(update_fields=["epoch_lowest_balance", "modified_at"])
+
+
+def pp_points(balance: Decimal) -> str:
+    """Pretty print points"""
+    str_balance = f"{balance:.1f}"
+    suffix = ".0"
+    # backport from Python 3.9 https://docs.python.org/3/library/stdtypes.html#str.removesuffix
+    if suffix and str_balance.endswith(suffix):
+        return str_balance[: -len(suffix)]
+    else:
+        return str_balance[:]
+
+
+def display_stacking_info(points: Decimal, epoch_lowest_balance: Decimal, current_epoch) -> str:
+    return f"Your Points Balance: `{pp_points(points)}`<:points:819648258112225316>\nHow many Points you are staking: `{pp_points(epoch_lowest_balance * current_epoch.portfolio_percentage)}`<:points:819648258112225316>\nWhen the Epoch ends: <t:{int(current_epoch.end_datetime.timestamp())}>\nEstimated Reward: `{pp_points(epoch_lowest_balance * current_epoch.apy * current_epoch.portfolio_percentage)}`<:points:819648258112225316>"  # noqa: E501
