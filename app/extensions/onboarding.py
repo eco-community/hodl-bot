@@ -10,8 +10,9 @@ from discord_slash.context import ComponentContext
 from discord_slash.utils.manage_components import create_button, create_actionrow
 
 from app.models import User, UserEpoch, Epoch
+from config import SHOULD_STAKE_AFTER_FIRST_EPOCH
 from app.utils import ensure_registered, get_user_balance, display_stacking_info
-from app.constants import GENESIS_EPOCH_ID
+from app.constants import GENESIS_EPOCH_ID, PENALTIES_FREE_DAYS_FOR_GENESIS
 
 
 class OnboardingCog(commands.Cog):
@@ -64,12 +65,20 @@ class OnboardingCog(commands.Cog):
             balance=points, is_staking=True, staking_started_date=timezone.now()
         )
         current_epoch = await Epoch.all().order_by("-id").first()
-        if (
+        penalties_free = (
             current_epoch.id == GENESIS_EPOCH_ID
-            and current_epoch.start_datetime + datetime.timedelta(days=1) > timezone.now()
-        ):
+            and current_epoch.start_datetime + datetime.timedelta(days=PENALTIES_FREE_DAYS_FOR_GENESIS)
+            > timezone.now()
+        )
+        if penalties_free:
             # allow to stake for genesis epoch without penalties during the first day
             epoch_lowest_balance = points
+        elif not SHOULD_STAKE_AFTER_FIRST_EPOCH:
+            await ctx.edit_origin(
+                content="I'm sorry but you can't begin staking right now.",
+                components=[],
+            )
+            return None
         else:
             # in current epoch user's staking balance will be zero
             # if you started staking in between epochs your stake will be counted from the next epoch
