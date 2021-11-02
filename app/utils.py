@@ -52,10 +52,13 @@ async def ensure_registered(user_id: int) -> User:
 async def get_user_balance(user_id: int) -> Decimal:
     """Get current user balance"""
     async with aiohttp.ClientSession() as session:
-        async with session.post(f"{config.ACCOUNTANT_API_PATH}/balances", json={"ids": [str(user_id)]}) as response:
-            response_json = await response.json()
-            str_points = response_json[0]["points"]
-            return Decimal(str_points)
+        try:
+            async with session.post(f"{config.ACCOUNTANT_API_PATH}/balances", json={"ids": [str(user_id)]}) as response:
+                response_json = await response.json()
+                str_points = response_json[0]["points"]
+                return Decimal(str_points)
+        except IndexError:
+            return Decimal(0)
 
 
 def generate_start_datetime_for_latest_epoch(latest_epoch=None) -> datetime.datetime:
