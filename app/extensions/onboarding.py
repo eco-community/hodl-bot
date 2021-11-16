@@ -11,7 +11,7 @@ from discord_slash.utils.manage_components import create_button, create_actionro
 
 from app.models import User, UserEpoch, Epoch
 from config import SHOULD_STAKE_AFTER_FIRST_EPOCH
-from app.utils import ensure_registered, get_user_balance, display_stacking_info
+from app.utils import ensure_registered, get_user_balance, display_staking_info
 from app.constants import GENESIS_EPOCH_ID, PENALTIES_FREE_DAYS_FOR_GENESIS
 
 
@@ -30,8 +30,8 @@ class OnboardingCog(commands.Cog):
         if message.guild:
             return None
         # check if users is already staking
-        is_already_stacking = await User.exists(Q(id=message.author.id) & Q(is_staking=True))
-        if is_already_stacking:
+        is_already_staking = await User.exists(Q(id=message.author.id) & Q(is_staking=True))
+        if is_already_staking:
             buttons = [
                 create_button(style=ButtonStyle.red, label="Yes", custom_id="continue_staking_no"),
                 create_button(style=ButtonStyle.blue, label="No", custom_id="continue_staking_yes"),
@@ -41,12 +41,12 @@ class OnboardingCog(commands.Cog):
             current_epoch = await Epoch.all().order_by("-id").first()
             user_epoch = await UserEpoch.get(user_id=user.id, epoch_id=current_epoch.id)
             return await message.channel.send(
-                display_stacking_info(
+                display_staking_info(
                     points=user.balance,
                     epoch_lowest_balance=user_epoch.epoch_lowest_balance,
                     current_epoch=current_epoch,
                 )
-                + "\n\nDo you want to stop stacking?",
+                + "\n\nDo you want to stop staking?",
                 components=[action_row],
             )
         else:
@@ -84,7 +84,7 @@ class OnboardingCog(commands.Cog):
             # if you started staking in between epochs your stake will be counted from the next epoch
             epoch_lowest_balance = 0
         await ctx.edit_origin(
-            content=f"Good. Your points will be staked. Please note that only {current_epoch.portfolio_percentage * 100:.0f}% of your balance will be staked. To be eligible for rewards you need to HODL points. After 2 weeks you are expected to earn {current_epoch.apy * 100:.0f}%. If you started staking in between epochs your stake will be counted from the next epoch.\n\n{display_stacking_info(points=points, epoch_lowest_balance=epoch_lowest_balance, current_epoch=current_epoch)}",  # noqa: E501
+            content=f"Good. Your points will be staked. Please note that only {current_epoch.portfolio_percentage * 100:.0f}% of your balance will be staked. To be eligible for rewards you need to HODL points. After 2 weeks you are expected to earn {current_epoch.apy * 100:.0f}%. If you started staking in between epochs your stake will be counted from the next epoch.\n\n{display_staking_info(points=points, epoch_lowest_balance=epoch_lowest_balance, current_epoch=current_epoch)}",  # noqa: E501
             components=[],
         )
         await UserEpoch.get_or_create(

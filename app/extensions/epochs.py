@@ -4,9 +4,10 @@ import datetime
 
 from tortoise import timezone
 from discord.ext import commands, tasks
+from tortoise.transactions import in_transaction
 from sentry_sdk import capture_exception, Hub
 
-from app.models import Epoch
+from app.models import Epoch, UserEpoch, User
 from app.constants import CHECK_EPOCH_IN_MINUTES
 from app.utils import generate_start_datetime_for_latest_epoch, generate_end_datetime_for_latest_epoch
 
@@ -55,15 +56,27 @@ class EpochCog(commands.Cog):
             latest_epoch.end_datetime - datetime.timedelta(minutes=2 * CHECK_EPOCH_IN_MINUTES) < timezone.now()
         )
         if is_too_close:
-            await Epoch.create(
-                start_datetime=generate_start_datetime_for_latest_epoch(latest_epoch),
-                end_datetime=generate_end_datetime_for_latest_epoch(latest_epoch),
-            )
-            # create user epochs for all users that are staking (if user is stacking epoch_lowest_balance = balance else epoch_lowest_balance = 0)
-            # also check that it doesn't conflict with get_or_create somewhere in the code
-            # async with in_transaction():
-            #     # TODO
-            #     pass
+            # create next epoch and it's UserEpoch for all users
+            # (if user is staking epoch_lowest_balance = balance else epoch_lowest_balance = 0)
+            async with in_transaction():
+                new_epoch = await Epoch.create(
+                    start_datetime=generate_start_datetime_for_latest_epoch(latest_epoch),
+                    end_datetime=generate_end_datetime_for_latest_epoch(latest_epoch),
+                )
+
+                # handle UserEpoch for staking users
+                staking_users = await User.filter(is_staking=True)
+                # create UserEpoch for staking users
+                UserEpoch.bulk_create(
+                    [UserEpoch(user=user, epoch=new_epoch, epoch_lowest_balance=user.balance) for user in staking_users]
+                )
+
+                # handle UserEpoch for non staking users
+                non_staking_users = await User.filter(is_staking=False)
+                # create UserEpoch for non staking users
+                UserEpoch.bulk_create(
+                    [UserEpoch(user=user, epoch=new_epoch, epoch_lowest_balance=0) for user in non_staking_users]
+                )
             return None
 
 

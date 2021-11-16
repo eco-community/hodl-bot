@@ -39,11 +39,11 @@ class SyncDiscordCog(commands.Cog):
         points = Decimal(self.points_regex.findall(message.system_content.replace(",", ""))[0])
 
         # check which users are in database and are staking
-        stacking_users_ids = await User.filter(Q(id__in=[*receivers_ids, sender_id]) & Q(is_staking=True)).values_list(
+        staking_users_ids = await User.filter(Q(id__in=[*receivers_ids, sender_id]) & Q(is_staking=True)).values_list(
             "id", flat=True
         )
-        is_sender_staking = sender_id in stacking_users_ids
-        receivers_who_stake_ids = list(set(receivers_ids).intersection(set(stacking_users_ids)))
+        is_sender_staking = sender_id in staking_users_ids
+        receivers_who_stake_ids = list(set(receivers_ids).intersection(set(staking_users_ids)))
 
         # get current epoch
         current_epoch = await Epoch.all().order_by("-id").first()

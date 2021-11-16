@@ -14,7 +14,7 @@ class User(Model):
         decimal_places=4,
         default=0,
         validators=[PositiveValueValidator()],
-    )
+    )  # if user is staking this balance will always be synced with real balance
     is_staking = fields.BooleanField(default=False)  # is user participating in staking or not
     staking_started_date = fields.data.DatetimeField(null=True)
     created_at = fields.DatetimeField(auto_now_add=True)
@@ -25,7 +25,7 @@ class User(Model):
 
 
 class Epoch(Model):
-    """Stacking Epoch table"""
+    """Staking Epoch table"""
 
     id = fields.IntField(pk=True)
     start_datetime = fields.data.DatetimeField()
