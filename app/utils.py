@@ -105,4 +105,4 @@ def pp_points(balance: Decimal) -> str:
 
 
 def display_staking_info(points: Decimal, epoch_lowest_balance: Decimal, current_epoch) -> str:
-    return f"Your Points Balance: `{pp_points(points)}`<:points:819648258112225316>\nHow many Points you are staking: `{pp_points(epoch_lowest_balance * current_epoch.portfolio_percentage)}`<:points:819648258112225316>\nWhen the Epoch ends: <t:{int(current_epoch.end_datetime.timestamp())}>\nEstimated Reward: `{pp_points(epoch_lowest_balance * current_epoch.apy * current_epoch.portfolio_percentage)}`<:points:819648258112225316>"  # noqa: E501
+    return f"Your Points Balance: `{pp_points(points)}`{config.POINTS_EMOJI}\nHow many Points you are staking: `{pp_points(epoch_lowest_balance * current_epoch.portfolio_percentage)}`{config.POINTS_EMOJI}\nWhen the Epoch ends: <t:{int(current_epoch.end_datetime.timestamp())}>\nEstimated Reward: `{pp_points(epoch_lowest_balance * current_epoch.apy * current_epoch.portfolio_percentage)}`{config.POINTS_EMOJI}"  # noqa: E501

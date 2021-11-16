@@ -10,7 +10,7 @@ from discord_slash.context import ComponentContext
 from discord_slash.utils.manage_components import create_button, create_actionrow
 
 from app.models import User, UserEpoch, Epoch
-from config import SHOULD_STAKE_AFTER_FIRST_EPOCH
+from config import SHOULD_STAKE_AFTER_FIRST_EPOCH, PROJECT_NAME
 from app.utils import ensure_registered, get_user_balance, display_staking_info
 from app.constants import GENESIS_EPOCH_ID, PENALTIES_FREE_DAYS_FOR_GENESIS
 
@@ -55,7 +55,7 @@ class OnboardingCog(commands.Cog):
                 create_button(style=ButtonStyle.blue, label="No", custom_id="start_staking_no"),
             ]
             action_row = create_actionrow(*buttons)
-            return await message.channel.send("Do you want to stake ECO points?", components=[action_row])
+            return await message.channel.send(f"Do you want to stake {PROJECT_NAME} points?", components=[action_row])
 
     @cog_ext.cog_component(components=["start_staking_yes"])
     async def choose_staking_yes(self, ctx: ComponentContext) -> None:

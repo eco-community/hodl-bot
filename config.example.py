@@ -7,3 +7,5 @@ LOG_LEVEL = "INFO"
 LOG_TO_FILE = True
 ACCOUNTANT_API_PATH = "https://www.hpmor.com/"
 SHOULD_STAKE_AFTER_FIRST_EPOCH = True  # sometimes we will need to only allow users to stake during genesis epoch
+PROJECT_NAME = "ECO"
+POINTS_EMOJI = "<:points:819648258112225316>"

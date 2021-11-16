@@ -1,4 +1,4 @@
-# EcoHodlBot
+# HodlBot
 
 A bot that can generate APY
 
@@ -28,3 +28,4 @@ A bot that can generate APY
 6. Init database tables via `aerich upgrade`
 7. Start bot via `python bot.py` or [via supervisord](http://supervisord.org/) or [systemd](https://es.wikipedia.org/wiki/Systemd)
 8. Add a bot to the server with at least `68608` scope
+9. Bot will read changes to user balance from `POINTS_LOG_CHANNEL_ID` channel, you will probably need to change how bot parses that channel in `sync_discord.SyncDiscordCog`

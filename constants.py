@@ -1,6 +1,8 @@
 import os
 from dotenv import load_dotenv
 
+import config
+
 
 # load env variables
 load_dotenv()
@@ -11,7 +13,7 @@ pg_password = os.getenv("POSTGRES_PASSWORD")
 pg_db = os.getenv("POSTGRES_DB")
 
 
-SENTRY_ENV_NAME = "eco_hodl_bot"
+SENTRY_ENV_NAME = f"{config.PROJECT_NAME}_hodl_bot".casefold()
 GUILD_INDEX = 0
 
 

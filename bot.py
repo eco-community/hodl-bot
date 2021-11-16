@@ -17,7 +17,7 @@ if __name__ == "__main__":
     intents = Intents.default()
     intents.members = True
     intents.messages = True
-    activity = Activity(type=ActivityType.playing, name="ECO APY")
+    activity = Activity(type=ActivityType.playing, name=f"{config.PROJECT_NAME} APY".upper())
     bot = commands.Bot(command_prefix="!hodl_bot.", help_command=None, intents=intents, activity=activity)
     SlashCommand(bot)
 
