@@ -67,14 +67,14 @@ class EpochCog(commands.Cog):
                 # handle UserEpoch for staking users
                 staking_users = await User.filter(is_staking=True)
                 # create UserEpoch for staking users
-                UserEpoch.bulk_create(
+                await UserEpoch.bulk_create(
                     [UserEpoch(user=user, epoch=new_epoch, epoch_lowest_balance=user.balance) for user in staking_users]
                 )
 
                 # handle UserEpoch for non staking users
                 non_staking_users = await User.filter(is_staking=False)
                 # create UserEpoch for non staking users
-                UserEpoch.bulk_create(
+                await UserEpoch.bulk_create(
                     [UserEpoch(user=user, epoch=new_epoch, epoch_lowest_balance=0) for user in non_staking_users]
                 )
             return None
