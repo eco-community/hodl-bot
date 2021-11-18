@@ -39,6 +39,9 @@ class OnboardingCog(commands.Cog):
             action_row = create_actionrow(*buttons)
             user = await User.get(id=message.author.id)
             current_epoch = await Epoch.all().order_by("-id").first()
+            is_epoch_genesis = current_epoch.id == GENESIS_EPOCH_ID
+            if not is_epoch_genesis and not SHOULD_STAKE_AFTER_FIRST_EPOCH:
+                return await message.channel.send("Earned points will be distributed soon")
             user_epoch = await UserEpoch.get(user_id=user.id, epoch_id=current_epoch.id)
             return await message.channel.send(
                 display_staking_info(
