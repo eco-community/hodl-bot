@@ -49,8 +49,8 @@ class OnboardingCog(commands.Cog):
                     epoch_lowest_balance=user_epoch.epoch_lowest_balance,
                     current_epoch=current_epoch,
                 )
-                + "\n\nDo you want to stop staking?",
-                components=[action_row],
+                # + "\n\nDo you want to stop staking?",
+                # components=[action_row],
             )
         else:
             buttons = [
