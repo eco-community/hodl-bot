@@ -87,7 +87,7 @@ class OnboardingCog(commands.Cog):
             # if you started staking in between epochs your stake will be counted from the next epoch
             epoch_lowest_balance = 0
         await ctx.edit_origin(
-            content=f"Good. Your points will be staked. Please note that only {current_epoch.portfolio_percentage * 100:.0f}% of your balance will be staked. To be eligible for rewards you need to HODL points. After 2 weeks you are expected to earn {current_epoch.apy * 100:.0f}%. If you started staking in between epochs your stake will be counted from the next epoch.\n\n{display_staking_info(points=points, epoch_lowest_balance=epoch_lowest_balance, current_epoch=current_epoch)}",  # noqa: E501
+            content=f"Good. Your points will be staked. Please note that {current_epoch.portfolio_percentage * 100}% of your balance will be staked. To be eligible for rewards you need to HODL points. After 2 weeks you are expected to earn {current_epoch.apy * 100}%. If you started staking in between epochs your stake will be counted from the next epoch.\n\n{display_staking_info(points=points, epoch_lowest_balance=epoch_lowest_balance, current_epoch=current_epoch)}",  # noqa: E501
             components=[],
         )
         await UserEpoch.get_or_create(
