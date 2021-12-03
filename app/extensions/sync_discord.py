@@ -16,7 +16,7 @@ class SyncDiscordCog(commands.Cog):
 
     def __init__(self, bot: commands.Bot):
         self.bot: commands.Bot = bot
-        self.points_regex = re.compile("<:points:819648258112225316>(\\d*\\.?\\d+)")
+        self.points_regex = re.compile("<:points:915573121631793162>(\\d*\\.?\\d+)")
 
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message) -> None:
