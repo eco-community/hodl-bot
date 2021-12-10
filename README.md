@@ -1,6 +1,8 @@
 # HodlBot
 
-A bot that can generate APY
+A Discord bot that can generate APY in Points issued by [The Accountant](https://github.com/eco/discord-accountant) bot.
+
+**For more on this bot and all the rest of the Eco Community bots, check out [this post](https://echo.mirror.xyz/GlFuqSbTZOLDl0LA7eDa0Yibhqq6IHNUC48nd3WJZQw).**
 
 
 ## How HODL bot works
